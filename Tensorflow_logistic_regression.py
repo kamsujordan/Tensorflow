@@ -68,7 +68,8 @@ if __name__== '__main__':
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
     #Optimizer
-    optimizer = tf.train.GradientDescentOptimizer( learning_rate= 0.1)
+    learning_rate= 0.1
+    optimizer = tf.train.GradientDescentOptimizer( learning_rate )
     train = optimizer.minimize(cost)
 
     sess = tf.Session()
@@ -83,18 +84,44 @@ if __name__== '__main__':
       tf_features: features,
       tf_targets: targets
       }))
+    
+    Accs_train = []
+    Losses_train = []
 
-    for epoch in range(10000):
+    
+    for epoch in range(100000):
         sess.run(train, feed_dict={
             tf_features: features,
             tf_targets: targets
         })
-        if epoch % 1000 == 0:
+        if epoch % 10000 == 0:
             print("Cost:", sess.run(cost, feed_dict={
                 tf_features: features,
                 tf_targets: targets
-            }))            
+            }))
+            acc_train = sess.run(accuracy, feed_dict={
+                tf_features: features,
+                tf_targets: targets
+                })
+            Loss_train = sess.run(cost, feed_dict={
+                tf_features: features,
+                tf_targets: targets
+                })
+            
+            Accs_train.append(acc_train)       
+            Losses_train.append(Loss_train)
 
+plt.plot(Accs_train, label="Train")
+plt.legend(loc='upper left')
+plt.title("Accuracy")
+plt.show()   
+
+plt.plot(Losses_train, label="Train")
+plt.legend(loc='upper left')
+plt.title("Loss")
+plt.show()
+
+   
 print("Nach dem Training: accuracy= ", sess.run(accuracy, feed_dict={
         tf_features: features,
         tf_targets: targets
