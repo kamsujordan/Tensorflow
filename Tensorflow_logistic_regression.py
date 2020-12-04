@@ -71,10 +71,10 @@ if __name__== '__main__':
     learning_rate= 0.1
     optimizer = tf.train.GradientDescentOptimizer( learning_rate )
     train = optimizer.minimize(cost)
-
+    
     sess = tf.Session()
     sess.run(tf.global_variables_initializer())
-
+    
     sess.run(train, feed_dict={
         tf_features: features,
         tf_targets: targets
@@ -110,15 +110,18 @@ if __name__== '__main__':
             
             Accs_train.append(acc_train)       
             Losses_train.append(Loss_train)
-
+    
+    #save_path = saver.save(sess, "./my_model.ckpt")
 plt.plot(Accs_train, label="Train")
 plt.legend(loc='upper left')
 plt.title("Accuracy")
+plt.savefig('TLR_Accuracy.png')
 plt.show()   
 
 plt.plot(Losses_train, label="Train")
 plt.legend(loc='upper left')
 plt.title("Loss")
+plt.savefig('TLR_Loss.png')
 plt.show()
 
    
